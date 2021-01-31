@@ -41,3 +41,18 @@ def playFair(plaintext,key):
         else:
             output += inv_matrix[setRowCol(r1,c2)] + inv_matrix[setRowCol(r2,c1)]
     return output
+
+def Hill(plaintext,key):
+    if type(key) == list:
+        key = np.array(key)
+    plaintext += 'x'*(len(plaintext) % key.shape[0])
+    plaintext = np.array([intChar(p) for p in plaintext]).reshape(-1,key.shape[1]).T
+    return ''.join(np.vectorize(lambda x: charInt(x))(np.dot(key,plaintext).T.reshape(1,-1).flatten()).tolist())
+
+def vigenere(plaintext,key,mode=True):
+    # True: auto-mode, False: repeating-mode
+    key += plaintext if mode else key * (len(plaintext)//len(key))
+    return ''.join([charInt(intChar(p)+intChar(key[i])) for i,p in enumerate(plaintext)])
+
+def vernam(plaintext,key):
+    return ''.join([charInt(intChar(p)+intChar(key[i])) for i,p in enumerate(plaintext)])
