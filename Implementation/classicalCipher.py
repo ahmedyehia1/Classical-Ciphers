@@ -8,7 +8,7 @@ def charInt(i):
     return chr(i%26+97)
 
 #  classical ciphers
-def caeser(plaintext,key):
+def caesar(plaintext,key):
     return ''.join([charInt(intChar(p)+key) for p in plaintext])
 
 def playFair(plaintext,key):
@@ -45,7 +45,7 @@ def playFair(plaintext,key):
 def Hill(plaintext,key):
     if type(key) == list:
         key = np.array(key)
-    plaintext += 'x'*(len(plaintext) % key.shape[0])
+    plaintext += 'x'*(key.shape[0] - len(plaintext) % key.shape[0])
     plaintext = np.array([intChar(p) for p in plaintext]).reshape(-1,key.shape[1]).T
     return ''.join(np.vectorize(lambda x: charInt(x))(np.dot(key,plaintext).T.reshape(1,-1).flatten()).tolist())
 
@@ -56,3 +56,5 @@ def vigenere(plaintext,key,mode=True):
 
 def vernam(plaintext,key):
     return ''.join([charInt(intChar(p)+intChar(key[i])) for i,p in enumerate(plaintext)])
+
+# print(Hill("VQUNPMHV",[[5,17],[8,3]])+'\n')
